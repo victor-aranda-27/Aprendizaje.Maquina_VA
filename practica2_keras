@@ -1,0 +1,34 @@
+# - Entrenamiento con Keras
+import numpy as np
+import tensorflow as tf
+from tensorflow import keras
+from tensorflow.keras import layers
+
+# Preparar datos (Convertir a arreglos de numpy y ajustar forma)
+hora_estudio = np.array([1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0]).reshape(-1, 1)
+resultado = np.array([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
+
+# Crear el modelo
+model = keras.Sequential([
+    layers.Dense(units=1, input_shape=[1], activation='sigmoid')
+])
+
+# Compilar
+model.compile(
+    optimizer=tf.keras.optimizers.SGD(learning_rate=0.01),
+    loss='binary_crossentropy',
+    metrics=['accuracy']
+)
+
+# Entrenamiento automático usando 'epochs'
+print("Iniciando entrenamiento con Keras...")
+model.fit(hora_estudio, resultado, epochs=100, verbose=1)
+
+# Predicción final
+print("\n--- Resultados de Predicción ---")
+horas_nuevas = np.array([2, 5.5, 8, 12]).reshape(-1, 1)
+predicciones = model.predict(horas_nuevas)
+
+for i in range(len(horas_nuevas)):
+    clase = 1 if predicciones[i] >= 0.5 else 0
+    print(f"Horas: {horas_nuevas[i][0]} -> Probabilidad: {predicciones[i][0]:.2f} -> Resultado: {clase}")
