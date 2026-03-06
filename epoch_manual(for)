@@ -1,0 +1,41 @@
+# Entrenamiento con ciclo manual
+Hora_estudio = (1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0, 5.5, 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0, 9.5, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0)
+Resultado = (0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1)
+
+peso = 0
+bias = 0
+alpha = 0.01
+epochs = 50  # Número de iteraciones completas sobre los datos
+
+print("Entrenando con ciclo manual...")
+
+for epoch in range(epochs):
+    error_total = 0
+    for i in range(len(Hora_estudio)):
+        x = Hora_estudio[i]
+        y = Resultado[i]
+        
+        # Cálculo de Z (Suma ponderada)
+        z = peso * x + bias
+        
+        # Función de activación (Escalón)
+        prediccion = 1 if z >= 0 else 0
+        
+        # Cálculo del error
+        error = y - prediccion
+        error_total += abs(error)
+        
+        # Ajuste de pesos y bias
+        peso = peso + alpha * error * x
+        bias = bias + alpha * error
+
+    if (epoch + 1) % 10 == 0:
+        print(f"Epoch {epoch+1}: Error total = {error_total}")
+
+print(f"\nEntrenamiento terminado.")
+print(f"Peso final: {peso:.4f}, Bias final: {bias:.4f}")
+
+# Prueba rápida
+h_test = 7
+p_test = 1 if (peso * h_test + bias) >= 0 else 0
+print(f"Prueba: {h_test} horas -> Predicción: {p_test}")
